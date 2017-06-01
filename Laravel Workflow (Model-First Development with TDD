@@ -1,0 +1,145 @@
+Laravel Workflow (Model-First Development with TDD)
+
+Model - PHP class representing the business object
+Migration - MySql script to create database table for the model
+
+=---------=---------=---------=---------=---------=---------=---------=---------=---------=---------=
+1. Create Model with Migration and Controller
+=---------=---------=---------=---------=---------=---------=---------=---------=---------=---------=
+
+user@host:~/$ php artisan make:model <ModelName> -mc (create 'm'igration and 'c'ontroller)
+
+	namespace App;
+
+	use Illuminate\Database\Eloquent\Model;
+
+	class Thread extends Model
+	{
+		//
+	}
+
+=---------=---------=---------=---------=---------=---------=---------=---------=---------=---------=
+2. Customize Migration ()
+=---------=---------=---------=---------=---------=---------=---------=---------=---------=---------=
+
+Edit /database/migrations/<filename> to edit table structure in the 'up' method:
+
+	public function up()
+	{
+		Schema::create('threads', function (Blueprint $table) {
+			$table->increments('id');
+			$table->integer('user_id');
+			$table->string('title');
+			$table->text('body');
+			$table->timestamps();
+		});
+	}
+
+=---------=---------=---------=---------=---------=---------=---------=---------=---------=---------=
+3. Run Migration to Synchronize Database Schema
+=---------=---------=---------=---------=---------=---------=---------=---------=---------=---------=
+
+user@host:~/$ php artisan migrate / php artisan migrate:refresh
+
+=---------=---------=---------=---------=---------=---------=---------=---------=---------=---------=
+4. Create Factories
+=---------=---------=---------=---------=---------=---------=---------=---------=---------=---------=
+
+Edit /database/factories/ModelFactory.php file to generate fake data for each table:
+
+	$factory->define(App\User::class, function (Faker\Generator $faker) {
+		static $password;
+		return [
+			'name' => $faker->name,
+			'email' => $faker->unique()->safeEmail,
+			'password' => $password ?: $password = bcrypt('secret'),
+			'remember_token' => str_random(10),
+		];
+	});
+	
+	$factory->define(App\Thread::class, function ($faker)
+	{
+		return [
+			'user_id' => function () {
+				return factory('App\User')->create()->id;
+			},
+			'title' => $faker->sentence,
+			'body' => $faker->paragraph
+		];
+	});
+
+=---------=---------=---------=---------=---------=---------=---------=---------=---------=---------=
+5. Create Seed Data
+=---------=---------=---------=---------=---------=---------=---------=---------=---------=---------=
+
+user@host:~/$ php artisan tinker
+
+>>> $threads = factory('App\Thread', 50)->create();
+
+...as well as one-to-many relationships...
+
+>>> $threads->each(function ($thread) { factory('App\Reply', 10)->create(['thread_id' => $thread->id]); });
+
+=---------=---------=---------=---------=---------=---------=---------=---------=---------=---------=
+6. Setup PHPUnit Test Environment
+=---------=---------=---------=---------=---------=---------=---------=---------=---------=---------=
+
+Alter testing database environment by editing the '/phpunit.xml' file:
+
+	<php>
+        <env name="DB_CONNECTION" value="sqlite"/>	<-- adding these two lines to have PHPUnit use SQLite in memory
+        <env name="DB_DATABASE" value=":memory:"/>
+    </php>
+
+=---------=---------=---------=---------=---------=---------=---------=---------=---------=---------=
+7. Create Tests
+=---------=---------=---------=---------=---------=---------=---------=---------=---------=---------=
+
+Edit test file in /tests/Feature/<filename>:
+
+namespace Tests\Feature;
+
+	use Tests\TestCase;
+	use Illuminate\Foundation\Testing\DatabaseMigrations;
+
+	class ThreadsTest extends TestCase
+	{
+		use DatabaseMigrations;						<-- make sure to use the DataMigrations "trait" to run migrations
+		                                                before/after PHPUnit tests run
+		
+		/** @test */
+		public function a_user_can_browse_threads()
+		{
+			$response = $this->get('/threads');		<-- customize test functionality
+			$response->assertStatus(200);
+		}
+	}
+
+=---------=---------=---------=---------=---------=---------=---------=---------=---------=---------=
+8. Run Tests
+=---------=---------=---------=---------=---------=---------=---------=---------=---------=---------=
+
+user@host:~/$ phpunit
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
