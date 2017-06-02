@@ -1,5 +1,10 @@
-This is the 'JenkinsFile' file. So what now?
-
-This is a change to the document.
-
-Another change.
+pipeline {
+    agent { docker 'php' }
+    stages {
+        stage('build') {
+            steps {
+                sh 'php --version'
+            }
+        }
+    }
+}
