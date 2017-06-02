@@ -11,9 +11,4 @@ This application is a sample/demo of the Laravel PHP framework. It is also a tes
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
 </p>
 
-<p align="center">
-<a href="https://packagist.org/packages/jenkins"><img src="https://poser.pugx.org/packagist/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/jenkins"><img src="https://poser.pugx.org/jenkins/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/jenkins"><img src="https://poser.pugx.org/jenkins/license.svg" alt="License"></a>
-</p>
 
