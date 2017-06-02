@@ -1,3 +1,7 @@
+## Laravel Forum
+
+This application is a sample/demo of the Laravel PHP framework. It is also a test bed for continuous integration and delivery (CI/CD) using Jenkins.
+
 <p align="center"><img src="https://laravel.com/assets/img/components/logo-laravel.svg"></p>
 
 <p align="center">
@@ -6,7 +10,3 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
 </p>
-
-## Laravel Forum
-
-This application is a sample/demo of the Laravel PHP framework. It is also a test bed for continuous integration and delivery (CI/CD) using Jenkins.
